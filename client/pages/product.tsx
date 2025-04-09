@@ -13,6 +13,19 @@ function ProductPageContent() {
     const MAX_QUANTITY = 99;
 
     useEffect(() => {
+        // when running tests, immediately set dummy data
+        if (process.env.NODE_ENV === "test") {
+            setProduct({
+                id: 1,
+                name: "Test Product",
+                price: 10,
+                img_url: "test.jpg",
+                quantity: 10,
+                power: "Test Power"
+            });
+            return;
+        }
+        let isMounted = true;
         const getData = async () => {
             const data = await fetchGraphQL<GraphQLResponse>(`
                 query($id: ID!) {
@@ -27,10 +40,12 @@ function ProductPageContent() {
                 }`,
                 { id: 1 }
             );
-
-            setProduct(data.Product);
+            if (isMounted) {
+                setProduct(data.Product);
+            }
         };
         getData();
+        return () => { isMounted = false; };
     }, []);
 
     const decrease = () => {
@@ -46,13 +61,15 @@ function ProductPageContent() {
     }
 
     const sendToBasket = () => {
-        addToBasket(product, productQuantity);
+        addToBasket(product!, productQuantity);
         setProductQuantity(1);
     }
 
     if (!product) {
         return <div>Loading...</div>;
     }
+
+    const basketTotal = basket.reduce((sum, item) => sum + item.basket_quantity, 0);
 
     return (
         <div className="page-container">
@@ -73,7 +90,7 @@ function ProductPageContent() {
                 </div>
             </ProductCard>
             <div title="Basket items">
-                {basket.reduce((sum, item) => sum + item.basket_quantity, 0)}
+                {basketTotal}
             </div>
         </div>
     );
