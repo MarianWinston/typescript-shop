@@ -11,9 +11,9 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ productImage, productTitle, productDetails, productAction, children }) => (
     <div className={styles.container}>
-        <img className={styles.product_image} src={productImage}></img>
+        <img className={styles.productImage} src={productImage} alt={productTitle}></img>
         <h1>{productTitle}</h1>
-        <p className={styles.product_details}>{productDetails}</p>
+        <p className={styles.productDetails}>{productDetails}</p>
         {children}
         <Button buttonAction={productAction} buttonText='Add to cart'/>
     </div>

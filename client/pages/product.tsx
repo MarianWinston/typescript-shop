@@ -3,6 +3,7 @@ import ProductCard from '../components/cards/ProductCard/ProductCard';
 import { useBasket, BasketProvider } from "../context/BasketContext";
 import { fetchGraphQL } from "../utils/fetchGraphQL";
 import { Product, GraphQLResponse  } from "../types";
+import styles from './product.module.css';
 
 function ProductPageContent() {
     const [product, setProduct] = useState<Product | null>(null);
@@ -21,7 +22,15 @@ function ProductPageContent() {
                 price: 10,
                 img_url: "test.jpg",
                 quantity: 10,
-                power: "Test Power"
+                power: "Test Power",
+                description: "Test Description",
+                brand: "Test Brand",
+                weight: 12,
+                height: 7,
+                width: 12,
+                length: 9,
+                model_code: "Test Code",
+                colour: "Test Colour"
             });
             return;
         }
@@ -35,7 +44,15 @@ function ProductPageContent() {
                         price
                         img_url,
                         quantity,
-                        power
+                        power,
+                        description,
+                        brand,
+                        weight,
+                        height,
+                        width,
+                        length,
+                        model_code,
+                        colour
                     }
                 }`,
                 { id: 1 }
@@ -73,24 +90,67 @@ function ProductPageContent() {
 
     return (
         <div className="page-container">
+            <div className={styles.productHeader}>
+                <img
+                    src="/octopus-logo.svg"
+                    alt="Octopus Energy Logo"
+                />
+                <img
+                    src="/basket.svg"
+                    alt="Basket icon"
+                />
+                <div className={styles.basketCount} title="Basket items">
+                    {basketTotal}
+                </div>
+            </div>
             <ProductCard
                 productImage={product.img_url}
                 productTitle={product.name}
                 productDetails={`${product.power} // Packet of ${4}`}
                 productAction={sendToBasket}
             >
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span>{`£${product.price * productQuantity}`}</span>
+                <div className={styles.quantityToggle}>
+                    <span className={styles.totalPrice}>{`£${product.price * productQuantity}`}</span>
                     {/* needs a class and styling */}
-                    <div>
-                        <button onClick={decrease}>-</button>
+                    <div className={styles.qualityControls}>
+                        <button 
+                            className={productQuantity === 1 ? styles.disabled : ""} 
+                            onClick={decrease}
+                        >-</button>
                         <span title="Current quantity">{productQuantity}</span>
-                        <button onClick={increase}>+</button>
+                        <button 
+                            className={productQuantity === 99 ? styles.disabled : ""} 
+                            onClick={increase}
+                        >+</button>
                     </div>
                 </div>
             </ProductCard>
-            <div title="Basket items">
-                {basketTotal}
+            <div className={styles.productDescriptionContainer}>
+                <h2>Description</h2>
+                <p>{product.description}</p>
+            </div>
+            <div className={styles.productSpecifications}>
+                <h2>Specifications</h2>
+                <div className={styles.productSpecificationsRow}>
+                    <div className={styles.productSpecificationsCol}>Brand</div>
+                    <div className={styles.productSpecificationsCol}>{product.brand}</div>
+                </div>
+                <div className={styles.productSpecificationsRow}>
+                    <div className={styles.productSpecificationsCol}>Item weight (g)</div>
+                    <div className={styles.productSpecificationsCol}>{product.weight}</div>
+                </div>
+                <div className={styles.productSpecificationsRow}>
+                    <div className={styles.productSpecificationsCol}>Dimensions (cm)</div>
+                    <div className={styles.productSpecificationsCol}>{`${product.height} x ${product.width} x ${product.length}`}</div>
+                </div>
+                <div className={styles.productSpecificationsRow}>
+                    <div className={styles.productSpecificationsCol}>Item Model Number</div>
+                    <div className={styles.productSpecificationsCol}>{product.model_code}</div>
+                </div>
+                <div className={styles.productSpecificationsRow}>
+                    <div className={styles.productSpecificationsCol}>Colour</div>
+                    <div className={styles.productSpecificationsCol}>{product.colour}</div>
+                </div>
             </div>
         </div>
     );

@@ -1,13 +1,16 @@
 .container {
     width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+    background: var(--hemocyanin);
 }
 
-.product_image {
+.productImage {
     width: 100%;
     border-radius: 16px;
 }
 
-.product_details {
+.productDetails {
     color: var(--purpleHaze);
 }
 
@@ -15,6 +18,8 @@
     .container {
         width: 600px;
         border: solid 2px var(--plum);
+        background: var(--siphon);
         border-radius: 16px;
+        padding: 20px;
     }
 }

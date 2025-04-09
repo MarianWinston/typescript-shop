@@ -6,7 +6,7 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = ({ buttonText, buttonAction }) => (
-    <button className={styles.button_primary} onClick={buttonAction}>
+    <button className={styles.buttonPrimary} onClick={buttonAction}>
         {buttonText}
     </button>
 );
