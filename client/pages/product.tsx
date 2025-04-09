@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import ProductCard from '../components/cards/ProductCard/ProductCard';
-import QuantitySelector from "../components/QuantitySelector/QuantitySelector";
-import { useBasket } from "../context/BasketContext";
+import { useBasket, BasketProvider } from "../context/BasketContext";
 import { fetchGraphQL } from "../utils/fetchGraphQL";
 import { Product, GraphQLResponse  } from "../types";
 
-export default function ProductPage() {
+function ProductPageContent() {
     const [product, setProduct] = useState<Product | null>(null);
     const [productQuantity, setProductQuantity] = useState(1);
-    const { addToBasket } = useBasket();
+    const { basket, addToBasket } = useBasket();
 
     const MIN_QUANTITY = 1;
-    const MAX_QUANITY = 99;
+    const MAX_QUANTITY = 99;
 
     useEffect(() => {
         const getData = async () => {
@@ -34,17 +33,15 @@ export default function ProductPage() {
         getData();
     }, []);
 
-    const reduceQuantity = () => {
-        if (!(productQuantity <= MIN_QUANTITY)) {
-            let tempQuantity = productQuantity;
-            setProductQuantity(tempQuantity-1);
+    const decrease = () => {
+        if (productQuantity > MIN_QUANTITY) {
+            setProductQuantity(productQuantity - 1);
         }
     }
 
-    const incrementQuantity = () => {
-        if (!(productQuantity >= MAX_QUANITY)) {
-            let tempQuantity = productQuantity;
-            setProductQuantity(tempQuantity+1);
+    const increase = () => {
+        if (productQuantity < MAX_QUANTITY) {
+            setProductQuantity(productQuantity + 1);
         }
     }
 
@@ -66,16 +63,26 @@ export default function ProductPage() {
                 productAction={sendToBasket}
             >
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span>{`£${product.price*productQuantity}`}</span>
-                    <QuantitySelector
-                        min={MIN_QUANTITY}
-                        max={MAX_QUANITY}
-                        selectorValue={productQuantity} 
-                        onReduce={reduceQuantity} 
-                        onIncrement={incrementQuantity}
-                    />
+                    <span>{`£${product.price * productQuantity}`}</span>
+                    {/* needs a class and styling */}
+                    <div>
+                        <button onClick={decrease}>-</button>
+                        <span title="Current quantity">{productQuantity}</span>
+                        <button onClick={increase}>+</button>
+                    </div>
                 </div>
             </ProductCard>
+            <div title="Basket items">
+                {basket.reduce((sum, item) => sum + item.basket_quantity, 0)}
+            </div>
         </div>
+    );
+}
+
+export default function ProductPage() {
+    return (
+        <BasketProvider>
+            <ProductPageContent />
+        </BasketProvider>
     );
 }
