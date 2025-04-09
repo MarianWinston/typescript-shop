@@ -1,0 +1,26 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 120px;
+}
+
+.quantity_selector_button,
+.quantity_selector_button_disabled {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 16px;
+    background: var(--sohoLights);
+    color: var(--siphon);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.quantity_selector_button_disabled {
+    background: var(--plum);
+}
+
+.quantity_selector_value {
+    font-size: 24px;
+}

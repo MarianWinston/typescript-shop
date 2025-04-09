@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: 120px;
+    background: var(--hemocyanin);
+    color: var(--purpleHaze);
+    padding: 20px;
+    font-size: 12px;
+    overflow: hidden;
+}
+
+.container p {
+    margin: 0;
+}
+
+/* For larger screens */
+@media screen and (min-width: 768px) {
+    .container {
+        font-size: 14px;
+    }
+}
